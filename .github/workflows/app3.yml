@@ -1,0 +1,27 @@
+name: App 3 Workflow
+
+on:
+  push:
+    paths:
+      - 'app-3/**'
+
+jobs:
+  run-app3:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: app-3
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build app
+        run: npm run build
+
+      - name: Deploy app
+        run: npm run deploy
