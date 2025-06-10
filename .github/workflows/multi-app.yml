@@ -40,7 +40,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Build App-1
+      - name: App-1
         working-directory: app-1
         run: |
           npm install
@@ -53,7 +53,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Build App-2
+      - name: App-2
         working-directory: app-2
         run: |
           npm install
@@ -66,7 +66,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Build App-3
+      - name: App-3
         working-directory: app-3
         run: |
           npm install
