@@ -1,0 +1,67 @@
+name: App 2 workflow
+
+on:
+  push:
+    paths:
+      - 'app-2/**'
+
+jobs:
+  run-app2:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: app-2
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build app
+        run: npm run build
+
+      - name: Deploy app
+        run: npm run deploy
+
+  run-app1:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: app-1
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build app
+        run: npm run build
+
+      - name: Deploy app
+        run: npm run deploy
+
+  run-app3:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: app-3
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build app
+        run: npm run build
+
+      - name: Deploy app
+        run: npm run deploy
