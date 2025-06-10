@@ -43,9 +43,9 @@ jobs:
       - name: Build App-1
         working-directory: app-1
         run: |
-          npm ci
+          npm install
           npm run build
-          echo "Built App-1"
+          npm run deploy
 
   app2:
     needs: detect-changes
@@ -56,9 +56,9 @@ jobs:
       - name: Build App-2
         working-directory: app-2
         run: |
-          npm ci
+          npm install
           npm run build
-          echo "Built App-2"
+          npm run deploy
 
   app3:
     needs: detect-changes
@@ -69,6 +69,6 @@ jobs:
       - name: Build App-3
         working-directory: app-3
         run: |
-          npm ci
+          npm install
           npm run build
-          echo "Built App-3"
+          npm run deploy
