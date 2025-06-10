@@ -1,0 +1,74 @@
+name: Multi Node Apps Workflow
+
+on:
+  push:
+    paths:
+      - 'app-1/**'
+      - 'app-2/**'
+      - 'app-3/**'
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      app1_changed: ${{ steps.filter.outputs.app1 }}
+      app2_changed: ${{ steps.filter.outputs.app2 }}
+      app3_changed: ${{ steps.filter.outputs.app3 }}
+
+    steps:
+      - name: Checkout full history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0         
+
+      - name: Detect which apps changed
+        id: filter
+        run: |
+          # Build a commit range that always works, even on the first commit
+          RANGE="${{ github.event.before }}..${{ github.sha }}"
+
+          # Git diff returns 0 even if no match; that's fine for grep tests
+          git diff --name-only "$RANGE" | tee changed_files.txt
+
+          echo "app1=$(grep -q '^app-1/' changed_files.txt && echo true || echo false)" >> $GITHUB_OUTPUT
+          echo "app2=$(grep -q '^app-2/' changed_files.txt && echo true || echo false)" >> $GITHUB_OUTPUT
+          echo "app3=$(grep -q '^app-3/' changed_files.txt && echo true || echo false)" >> $GITHUB_OUTPUT
+
+  app1:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.app1_changed == 'true' || needs.detect-changes.outputs.app2_changed == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: App-1
+        working-directory: app-1
+        run: |
+          npm install
+          npm run build
+          npm run deploy
+
+  app2:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.app2_changed == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: App-2
+        working-directory: app-2
+        run: |
+          npm install
+          npm run build
+          npm run deploy
+
+  app3:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.app3_changed == 'true' || needs.detect-changes.outputs.app2_changed == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: App-3
+        working-directory: app-3
+        run: |
+          npm install
+          npm run build
+          npm run deploy
