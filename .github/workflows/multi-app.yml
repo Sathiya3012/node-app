@@ -48,7 +48,7 @@ jobs:
           npm run deploy
 
   app2:
-    needs: detect-changes
+    needs: app1
     if: needs.detect-changes.outputs.app2_changed == 'true'
     runs-on: ubuntu-latest
     steps:
@@ -61,7 +61,7 @@ jobs:
           npm run deploy
 
   app3:
-    needs: detect-changes
+    needs: app2
     if: needs.detect-changes.outputs.app3_changed == 'true' || needs.detect-changes.outputs.app2_changed == 'true'
     runs-on: ubuntu-latest
     steps:
